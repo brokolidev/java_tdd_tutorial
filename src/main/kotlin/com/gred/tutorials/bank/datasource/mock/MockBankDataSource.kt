@@ -16,13 +16,23 @@ class MockBankDataSource : BankDataSource {
 
     override fun retrieveBanks(): Collection<Bank> = banks
     override fun retrieveBank(accountNumber: String): Bank =
-        banks.firstOrNull() { it.accountNumber == accountNumber }
+        banks.firstOrNull { it.accountNumber == accountNumber }
             ?: throw NoSuchElementException("${accountNumber}에 해당하는 Bank를 찾을 수 없습니다.")
 
     override fun createBank(bank: Bank): Bank {
         if(banks.any { it.accountNumber == bank.accountNumber }) {
             throw IllegalArgumentException("${bank.accountNumber}에 해당하는 동일한 Bank가 이미 존재합니다.")
         }
+        banks.add(bank)
+
+        return bank
+    }
+
+    override fun updateBank(bank: Bank): Bank {
+        val currentBank = banks.firstOrNull { it.accountNumber == bank.accountNumber }
+            ?: throw  NoSuchElementException("${bank.accountNumber}에 해당하는 Bank가 없습니다.")
+
+        banks.remove(currentBank)
         banks.add(bank)
 
         return bank
