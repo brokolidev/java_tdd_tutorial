@@ -5,4 +5,5 @@ import com.gred.tutorials.bank.model.Bank
 interface BankDataSource {
 
     fun retrieveBanks(): Collection<Bank>
+    fun retrieveBank(accountNumber: String): Bank
 }
